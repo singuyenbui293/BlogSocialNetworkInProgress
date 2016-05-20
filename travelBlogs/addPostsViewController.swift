@@ -56,6 +56,8 @@ class addPostsViewController: UIViewController {
     }
     
     @IBAction func cancel(sender: AnyObject) {
+        dismissViewControllerAnimated(true, completion: nil)
+        
     }
     
     

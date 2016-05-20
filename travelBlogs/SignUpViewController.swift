@@ -48,6 +48,7 @@ class SignUpViewController: UIViewController {
     }
     
     @IBAction func cancelButton(sender: AnyObject) {
+        dismissViewControllerAnimated(true, completion: nil)
     }
     
     func alertMessage (title: String, message: String) {

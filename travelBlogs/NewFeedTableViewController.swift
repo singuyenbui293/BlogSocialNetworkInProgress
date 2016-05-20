@@ -12,6 +12,9 @@ import Firebase
 class NewFeedTableViewController: UITableViewController {
 
     var ref =  FIRDatabase.database().reference()
+    var Post = ""
+    var listOfPost = NSMutableDictionary()
+    
     
     
     
@@ -27,14 +30,25 @@ class NewFeedTableViewController: UITableViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        
        
+        ref.child("posts").observeEventType(.Value, withBlock: { (snapshot) in
+            print(snapshot.value)
+            if let posts = snapshot.value as? NSDictionary {
+                for post in posts {
+                    let key = post.key as! String
+                    let postExist = (self.listOfPost[key] != nil)
+                    if !postExist {
+                        self.listOfPost.setValue(post.value, forKey: key)
+                    }
+                }
+            }
+            self.tableView.reloadData()
+            
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+        
       
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
     override func didReceiveMemoryWarning() {
@@ -46,18 +60,21 @@ class NewFeedTableViewController: UITableViewController {
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return listOfPost.count
     }
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
-
+        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
+        let arrayOfKeys = listOfPost.allKeys
+        let key = arrayOfKeys[indexPath.row]
+        let value = listOfPost[key as! String]
+        cell.textLabel?.text = (value as! NSDictionary)["Post Text"] as? String
         // Configure the cell...
 
         return cell

@@ -51,13 +51,10 @@ class ViewController: UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        if let user = FIRAuth.auth()?.currentUser {
-            // User is signed in.
-            self.performSegueWithIdentifier("newFeed", sender: self)
-        } else {
-            
-        }
+        
     }
+    
+    
    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
